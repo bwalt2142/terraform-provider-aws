@@ -25,18 +25,18 @@ func dataSourceAwsRdsOrderableDbInstance() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 
-			"instance_class": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-
 			"engine": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 
 			"engine_version": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+
+			"instance_class": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -88,13 +88,13 @@ func dataSourceAwsRdsOrderableDbInstance() *schema.Resource {
 				Computed: true,
 			},
 
-			"preferred_engine_versions": {
+			"preferred_instance_classes": {
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 
-			"preferred_instance_classes": {
+			"preferred_engine_versions": {
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
@@ -210,66 +210,65 @@ func dataSourceAwsRdsOrderableDbInstanceRead(d *schema.ResourceData, meta interf
 		for _, instanceOption := range resp.OrderableDBInstanceOptions {
 			if instanceOption == nil {
 				continue
-			}
 
-			if v, ok := d.GetOk("storage_type"); ok {
-				if aws.StringValue(instanceOption.StorageType) != v.(string) {
-					continue
+				if v, ok := d.GetOk("storage_type"); ok {
+					if aws.StringValue(instanceOption.StorageType) != v.(string) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_enhanced_monitoring"); ok {
-				if aws.BoolValue(instanceOption.SupportsEnhancedMonitoring) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_enhanced_monitoring"); ok {
+					if aws.BoolValue(instanceOption.SupportsEnhancedMonitoring) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_global_databases"); ok {
-				if aws.BoolValue(instanceOption.SupportsGlobalDatabases) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_global_databases"); ok {
+					if aws.BoolValue(instanceOption.SupportsGlobalDatabases) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_iam_database_authentication"); ok {
-				if aws.BoolValue(instanceOption.SupportsIAMDatabaseAuthentication) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_iam_database_authentication"); ok {
+					if aws.BoolValue(instanceOption.SupportsIAMDatabaseAuthentication) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_iops"); ok {
-				if aws.BoolValue(instanceOption.SupportsIops) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_iops"); ok {
+					if aws.BoolValue(instanceOption.SupportsIops) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_kerberos_authentication"); ok {
-				if aws.BoolValue(instanceOption.SupportsKerberosAuthentication) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_kerberos_authentication"); ok {
+					if aws.BoolValue(instanceOption.SupportsKerberosAuthentication) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_performance_insights"); ok {
-				if aws.BoolValue(instanceOption.SupportsPerformanceInsights) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_performance_insights"); ok {
+					if aws.BoolValue(instanceOption.SupportsPerformanceInsights) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_storage_autoscaling"); ok {
-				if aws.BoolValue(instanceOption.SupportsStorageAutoscaling) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_storage_autoscaling"); ok {
+					if aws.BoolValue(instanceOption.SupportsStorageAutoscaling) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			if v, ok := d.GetOk("supports_storage_encryption"); ok {
-				if aws.BoolValue(instanceOption.SupportsStorageEncryption) != v.(bool) {
-					continue
+				if v, ok := d.GetOk("supports_storage_encryption"); ok {
+					if aws.BoolValue(instanceOption.SupportsStorageEncryption) != v.(bool) {
+						continue
+					}
 				}
-			}
 
-			instanceClassResults = append(instanceClassResults, instanceOption)
-		}
-		return !lastPage
-	})
+				instanceClassResults = append(instanceClassResults, instanceOption)
+			}
+			return !lastPage
+		})
 
 	if err != nil {
 		return fmt.Errorf("error reading RDS orderable DB instance options: %w", err)
